@@ -7,5 +7,5 @@ http://lotadata.com/docs/androidsdk.html#lotadata-moments-sdk-android
 
 ## Using
 
-    $ cordova plugin add https://github.com/radiocutfm/cordova-plugin-ld-moments-sdk.git
+    $ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-ld-moments-sdk.git
     
