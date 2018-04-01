@@ -1,10 +1,10 @@
 # Cordova Plugin for LotaData SDK
 
-http://lotadata.com/docs/androidsdk.html#lotadata-moments-sdk-android
+https://docs.lotadata.com/mobile-sdk/cordova.html
 
 ## Using
 
-    $ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-ld-moments-sdk.git
+    $ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk.git
     
 ![Alt Text](https://www.gitbook.com/@lotadata/avatar)
 
