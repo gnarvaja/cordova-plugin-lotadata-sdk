@@ -1,9 +1,6 @@
-# Cordova Lotadata SDK Plugin
-
-Plugin for Lotadata SDK
+# Cordova Plugin for LotaData SDK
 
 http://lotadata.com/docs/androidsdk.html#lotadata-moments-sdk-android
-
 
 ## Using
 
