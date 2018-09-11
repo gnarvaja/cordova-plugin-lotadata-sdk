@@ -54,11 +54,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 public void run() {
                     if (verifyPermissions(callbackContext, true)) {
                         Log.i(TAG, "Permissions OK, not getInstance disabled");
-                        if (api_key.equals("")) {
-                            momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                        } else {
-                            momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                        }
+                        momentsClient = MomentsClient.getInstance(cordova.getActivity());
                         if (momentsClient != null) {
                             if (momentsClient.isConnected()) {
                                 callbackContext.success("isConnected");
@@ -90,7 +86,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 callbackContext.success("Event recorded");
             }
             return true;
-        } else if (action.equals("setTrackingMode")) {
+        } else if (action.equals("setFgTrackingMode")) {
             if (momentsClient == null) {
                 callbackContext.error("Not initialized!");
             } else {
@@ -104,7 +100,7 @@ public class MomentsPlugin extends CordovaPlugin {
                     callbackContext.error("trackingMode not specified");
                 }
                 if (mode != null) {
-                    momentsClient.setTrackingMode(mode);
+                    momentsClient.setFgTrackingMode(mode);
                     callbackContext.success("setTrackingMode OK");
                 }
             }
@@ -161,11 +157,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 permissionsCallback.error("Error, ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permissions not granted");
             } else {
                 if (momentsClient == null) {
-                    if (api_key.equals("")) {
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                    } else {
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                    }
+                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
                 }
                 if (momentsClient != null) {
                     if (momentsClient.isConnected()) {

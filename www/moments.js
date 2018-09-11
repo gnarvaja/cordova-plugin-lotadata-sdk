@@ -10,7 +10,7 @@ module.exports = {
         else
             cordova.exec(successCallback, errorCallback, "MomentsPlugin", "recordEvent", [eventName]);
     },
-    setTrackingMode: function (trackingMode, successCallback, errorCallback) {
+    setFgTrackingMode: function (trackingMode, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "setTrackingMode", [trackingMode]);
     },
     bestKnownLocation: function (successCallback, errorCallback) {
