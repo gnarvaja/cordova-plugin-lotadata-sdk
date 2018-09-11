@@ -8,7 +8,6 @@
   <engines>
     <engine name="cordova" version=">=3.4.0"/>
   </engines>
-  <preference name="API_KEY" />
 
   <asset src="www/moments.js" target="js/moments.js"/>
 
@@ -16,26 +15,16 @@
     <js-module src="www/moments.js" name="moments">
       <clobbers target="window.plugins.moments" />
     </js-module>
+
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="MomentsPlugin">
         <param name="android-package" value="com.lotadata.moments.plugin.MomentsPlugin"/>
         <param name="onload" value="true" />  <!-- Must Have -->
       </feature>
     </config-file>
-    <config-file target="AndroidManifest.xml" parent="/*">
-      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-      <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-      <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    </config-file>
-
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <service android:name="com.lotadata.moments.MomentsService" android:exported="false"/>
-      <meta-data android:name="com.lotadata.moments.API_KEY" android:value="$API_KEY"/>
-    </config-file>
 
     <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
-    <source-file src="moments-sdk-latest.jar" target-dir="libs"/>
+    <source-file src="lotadata-sdk-latest.aar" target-dir="libs"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
 </plugin>
