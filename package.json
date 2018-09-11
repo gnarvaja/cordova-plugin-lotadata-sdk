@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-lotadata-sdk",
+  "version": "1.0.0",
+  "description": "Lotadata SDK wrapper for Cordova.",
+  "cordova": {
+    "id": "cordova-plugin-lotadata-sdk",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk"
+  },
+  "keywords": [
+    "Geo-insights",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Lotadata <support@lotadata.com>",
+  "license": "MIT",
+  "homepage": "https://www.lotadata.com/"
+}
