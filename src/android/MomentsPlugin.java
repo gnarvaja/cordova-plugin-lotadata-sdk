@@ -52,25 +52,19 @@ public class MomentsPlugin extends CordovaPlugin {
             Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-                    if (verifyPermissions(callbackContext, true)) {
-                        Log.i(TAG, "Permissions OK, not getInstance disabled");
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                        if (momentsClient != null) {
-                            if (momentsClient.isConnected()) {
-                                callbackContext.success("isConnected");
-                            } else {
-                                callbackContext.success("is Not Connected");
-                            }
+                    Log.i(TAG, "Permissions OK, not getInstance disabled");
+                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
+                    if (momentsClient != null) {
+                        if (momentsClient.isConnected()) {
+                            callbackContext.success("isConnected");
                         } else {
-                            callbackContext.error("Error, permission OK but momentsClient still == null");
+                            callbackContext.success("is Not Connected");
                         }
+                    } else {
+                        callbackContext.error("Error, permission OK but momentsClient still == null");
                     }
                 }
             });
-            return true;
-        } else if (action.equals("verifyPermissions")) {
-            boolean ask = data.length() == 1 ? data.getBoolean(0) : true;
-            callbackContext.success(verifyPermissions(null, ask) ? "true" : "false");
             return true;
         } else if (action.equals("recordEvent")) {
             if (momentsClient == null) {
@@ -158,66 +152,6 @@ public class MomentsPlugin extends CordovaPlugin {
         json.put("longitude", location.getLongitude());
         json.put("provider", location.getProvider());
         return json;
-    }
-
-    @Override
-    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        if (permissionsCallback == null) {
-            return;
-        }
-
-        if (requestCode != REQUEST_LOCATION) {
-            return;
-        }
-
-        if (permissions != null && permissions.length > 0) {
-            //Call checkPermission again to verify
-            if (!hasAllPermissions()) {
-                permissionsCallback.error("Error, ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permissions not granted");
-            } else {
-                if (momentsClient == null) {
-                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                }
-                if (momentsClient != null) {
-                    if (momentsClient.isConnected()) {
-                        permissionsCallback.success("isConnected");
-                    } else {
-                        permissionsCallback.success("is Not Connected");
-                    }
-                } else {
-                    permissionsCallback.error("Error, permission OK but momentsClient still == null");
-                }
-            }
-        } else {
-            permissionsCallback.error("Unknown error with permissions");
-        }
-        permissionsCallback = null;
-    }
-
-    private boolean hasAllPermissions() {
-        for (String permission : requiredPermissions) {
-            if(!cordova.hasPermission(permission)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean verifyPermissions(final CallbackContext callbackContext, boolean ask) {
-        // Check if we have the permissions
-        // and if we don't prompt the user
-        // Return true if the permissions are granted. Else returns false and the authorization or not arrives on
-        // call to method onRequestPermissionResult
-        if (!hasAllPermissions()) {
-            Log.i(TAG, "Asking for permissions " + permissions[0] + " and " + permissions[1]);
-            if (ask) {
-                cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
-                permissionsCallback = callbackContext;
-            }
-            return hasAllPermissions();
-        } else {
-            return true;
-        }
     }
 
     public void onDestroy() {

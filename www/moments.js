@@ -19,8 +19,5 @@ module.exports = {
     bestKnownLocation: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
     },
-    verifyPermissions: function (ask, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "MomentsPlugin", "verifyPermissions", [ask]);
-    }
     // TODO: add more moments SDK functions
 };
