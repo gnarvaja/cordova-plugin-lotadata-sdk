@@ -1,4 +1,14 @@
+repositories {
+	flatDir {
+		dirs 'libs'
+	}
+}
+
 dependencies {
-    provided files('libs/moments-sdk-latest.jar')
-    compile 'com.google.android.gms:play-services-location:+'
+    implementation(name: 'lotadata-sdk-latest', ext: 'aar')
+
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-awareness:15.0.1'
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
 }
