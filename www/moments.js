@@ -1,8 +1,8 @@
 /*global cordova, module*/
 
 module.exports = {
-    initialize: function (apiKey, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "MomentsPlugin", "initialize", [apiKey]);
+    initialize: function (successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "MomentsPlugin", "initialize", []);
     },
     recordEvent: function (eventName, eventData, successCallback, errorCallback) {
         if (eventData !== null && eventData !== undefined)
@@ -19,5 +19,4 @@ module.exports = {
     bestKnownLocation: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
     },
-    // TODO: add more moments SDK functions
 };

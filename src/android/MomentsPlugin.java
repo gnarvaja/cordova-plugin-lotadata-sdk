@@ -25,21 +25,6 @@ public class MomentsPlugin extends CordovaPlugin {
 
     private Moments momentsClient = null;
 
-    // Location Permissions
-    private static final int REQUEST_LOCATION = 2342;
-    public static String[] permissions = {
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    };
-
-    public static String[] requiredPermissions = {
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    };
-
-    private CallbackContext permissionsCallback;
-    private String api_key;
-
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
 
@@ -48,7 +33,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 momentsClient.disconnect();
                 momentsClient = null;
             }
-            api_key = data.getString(0);
+
             Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
