@@ -4,9 +4,9 @@ https://docs.lotadata.com/mobile-sdk/cordova.html
 
 ## Using
 
-    $ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk.git
-    
-![Alt Text](https://www.gitbook.com/@lotadata/avatar)
+```
+$ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk.git
+```
 
 ---
 
@@ -20,7 +20,3 @@ We are eager to hear from you and happy to share best practices for integrating 
 But first, please [sign up for an account with LotaData](http://platform.lotadata.com/?signup=true) so that we may send you the link to download our SDK.
 
 ---
-
-
-
-    
