@@ -5,10 +5,10 @@ repositories {
 }
 
 dependencies {
-    implementation(name: 'lotadata-sdk-latest', ext: 'aar')
+    compile(name: 'lotadata-sdk-latest', ext: 'aar')
 
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.gms:play-services-awareness:15.0.1'
-    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    compile 'com.google.android.gms:play-services-ads:15.0.1'
+    compile 'com.google.android.gms:play-services-location:15.0.1'
+    compile 'com.google.android.gms:play-services-awareness:15.0.1'
+    compile 'com.google.maps.android:android-maps-utils:0.5+'
 }
