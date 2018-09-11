@@ -101,7 +101,26 @@ public class MomentsPlugin extends CordovaPlugin {
                 }
                 if (mode != null) {
                     momentsClient.setFgTrackingMode(mode);
-                    callbackContext.success("setTrackingMode OK");
+                    callbackContext.success("setFgTrackingMode OK");
+                }
+            }
+            return true;
+        } else if (action.equals("setBgTrackingMode")) {
+            if (momentsClient == null) {
+                callbackContext.error("Not initialized!");
+            } else {
+                final String trackingMode = data.getString(0);
+                TrackingMode mode = null;
+                try {
+                    mode = TrackingMode.valueOf(trackingMode);
+                } catch (IllegalArgumentException err) {
+                    callbackContext.error("Invalid trackingMode");
+                } catch (NullPointerException err) {
+                    callbackContext.error("trackingMode not specified");
+                }
+                if (mode != null) {
+                    momentsClient.setBgTrackingMode(mode);
+                    callbackContext.success("setBgTrackingMode OK");
                 }
             }
             return true;
