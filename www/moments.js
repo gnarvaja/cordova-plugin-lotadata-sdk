@@ -79,4 +79,12 @@ moments.bestKnownLocation = function (successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
 };
 
+moments.TrackingMode = {
+    MANUAL: "MANUAL",
+    MINIMAL_POWER: "MINIMAL_POWER",
+    STAY_DETECTION: "STAY_DETECTION",
+    ROUTE: "ROUTE",
+    HAWK_EYE: "HAWK_EYE"
+}
+
 module.exports = moments;
