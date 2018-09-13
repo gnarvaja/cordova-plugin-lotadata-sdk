@@ -49,8 +49,8 @@ moments.recordEvent = function (eventName, eventData, successCallback, errorCall
 
 /**
  * @example
- * plugins.moments.setFgTrackingMode("Route", success, error);
- * @param {string} trackingMode - Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes)
+ * plugins.moments.setFgTrackingMode(plugins.moments.TrackingMode.ROUTE, success, error);
+ * @param {module:moments.TrackingMode} trackingMode
  * @param {module:moments.onSuccess} successCallback
  * @param {module:moments.onError} errorCallback
  */
@@ -60,8 +60,8 @@ moments.setFgTrackingMode = function (trackingMode, successCallback, errorCallba
 
 /**
  * @example
- * plugins.moments.setBgTrackingMode("MINIMAL_POWER", success, error);
- * @param {string} trackingMode - Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes)
+ * plugins.moments.setBgTrackingMode(plugins.moments.TrackingMode.MINIMAL_POWER, success, error);
+ * @param {module:moments.TrackingMode} trackingMode
  * @param {module:moments.onSuccess} successCallback
  * @param {module:moments.onError} errorCallback
  */
@@ -79,6 +79,9 @@ moments.bestKnownLocation = function (successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
 };
 
+/**
+ * @enum {string}
+ */
 moments.TrackingMode = {
     MANUAL: "MANUAL",
     MINIMAL_POWER: "MINIMAL_POWER",

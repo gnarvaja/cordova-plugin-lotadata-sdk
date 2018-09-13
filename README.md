@@ -26,6 +26,7 @@ But first, please [sign up for an account with LotaData](http://platform.lotadat
 <a name="module_moments"></a>
 
 * [moments](#module_moments)
+    * [.TrackingMode](#module_moments.TrackingMode) : <code>enum</code>
     * [.initialize(successCallback, errorCallback)](#module_moments.initialize)
     * [.recordEvent(eventName, eventData, successCallback, errorCallback)](#module_moments.recordEvent)
     * [.setFgTrackingMode(trackingMode, successCallback, errorCallback)](#module_moments.setFgTrackingMode)
@@ -33,6 +34,20 @@ But first, please [sign up for an account with LotaData](http://platform.lotadat
     * [.bestKnownLocation(successCallback, errorCallback)](#module_moments.bestKnownLocation)
     * [.onError](#module_moments.onError) : <code>function</code>
     * [.onSuccess](#module_moments.onSuccess) : <code>function</code>
+
+<a name="module_moments.TrackingMode"></a>
+
+### moments.TrackingMode : <code>enum</code>
+**Kind**: static enum of [<code>moments</code>](#module_moments)  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| MANUAL | <code>string</code> | <code>&quot;MANUAL&quot;</code> | 
+| MINIMAL_POWER | <code>string</code> | <code>&quot;MINIMAL_POWER&quot;</code> | 
+| STAY_DETECTION | <code>string</code> | <code>&quot;STAY_DETECTION&quot;</code> | 
+| ROUTE | <code>string</code> | <code>&quot;ROUTE&quot;</code> | 
+| HAWK_EYE | <code>string</code> | <code>&quot;HAWK_EYE&quot;</code> | 
 
 <a name="module_moments.initialize"></a>
 
@@ -72,30 +87,30 @@ plugins.moments.recordEvent("level completed", 10, success, error);
 ### moments.setFgTrackingMode(trackingMode, successCallback, errorCallback)
 **Kind**: static method of [<code>moments</code>](#module_moments)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| trackingMode | <code>string</code> | Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes) |
-| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) |  |
-| errorCallback | [<code>onError</code>](#module_moments.onError) |  |
+| Param | Type |
+| --- | --- |
+| trackingMode | [<code>TrackingMode</code>](#module_moments.TrackingMode) | 
+| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) | 
+| errorCallback | [<code>onError</code>](#module_moments.onError) | 
 
 **Example**  
 ```js
-plugins.moments.setFgTrackingMode("Route", success, error);
+plugins.moments.setFgTrackingMode(plugins.moments.TrackingMode.ROUTE, success, error);
 ```
 <a name="module_moments.setBgTrackingMode"></a>
 
 ### moments.setBgTrackingMode(trackingMode, successCallback, errorCallback)
 **Kind**: static method of [<code>moments</code>](#module_moments)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| trackingMode | <code>string</code> | Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes) |
-| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) |  |
-| errorCallback | [<code>onError</code>](#module_moments.onError) |  |
+| Param | Type |
+| --- | --- |
+| trackingMode | [<code>TrackingMode</code>](#module_moments.TrackingMode) | 
+| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) | 
+| errorCallback | [<code>onError</code>](#module_moments.onError) | 
 
 **Example**  
 ```js
-plugins.moments.setBgTrackingMode("MINIMAL_POWER", success, error);
+plugins.moments.setBgTrackingMode(plugins.moments.TrackingMode.MINIMAL_POWER, success, error);
 ```
 <a name="module_moments.bestKnownLocation"></a>
 
@@ -132,6 +147,5 @@ Callback function that provides a successful message.
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>string</code> | The message is provided by the device's native code. |
-
 
 ---
