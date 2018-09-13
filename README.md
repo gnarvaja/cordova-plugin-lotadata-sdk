@@ -1,6 +1,6 @@
 # Cordova Plugin for LotaData SDK
 
-https://docs.lotadata.com/mobile-sdk/cordova.html
+Check the [SDK Documentation](https://docs.lotadata.com/) for usage instructions.
 
 ## Installation
 
@@ -28,15 +28,15 @@ But first, please [sign up for an account with LotaData](http://platform.lotadat
 * [moments](#module_moments)
     * [.initialize(successCallback, errorCallback)](#module_moments.initialize)
     * [.recordEvent(eventName, eventData, successCallback, errorCallback)](#module_moments.recordEvent)
+    * [.setFgTrackingMode(trackingMode, successCallback, errorCallback)](#module_moments.setFgTrackingMode)
+    * [.setBgTrackingMode(trackingMode, successCallback, errorCallback)](#module_moments.setBgTrackingMode)
+    * [.bestKnownLocation(successCallback, errorCallback)](#module_moments.bestKnownLocation)
     * [.onError](#module_moments.onError) : <code>function</code>
     * [.onSuccess](#module_moments.onSuccess) : <code>function</code>
 
 <a name="module_moments.initialize"></a>
 
 ### moments.initialize(successCallback, errorCallback)
-Initializes the sdk. Recommended to ask for permissions 
-(if needed) before doing so.
-
 **Kind**: static method of [<code>moments</code>](#module_moments)  
 
 | Param | Type |
@@ -51,13 +51,6 @@ plugins.moments.initialize(success, error);
 <a name="module_moments.recordEvent"></a>
 
 ### moments.recordEvent(eventName, eventData, successCallback, errorCallback)
-An in-app event represents an event or action performed 
-by the end user within your mobile app. LotaData's SDK enables you to 
-define, tag, record, and analyze in-app events for your mobile users. 
-Example of commonly tagged events are: “app launched”, “app moved to foreground”, 
-“app moved to background”, “start button clicked", "game level complete",
-"transaction start", "payment complete", "packaged picked up", "delivery complete".
-
 **Kind**: static method of [<code>moments</code>](#module_moments)  
 
 | Param | Type |
@@ -73,6 +66,50 @@ Example of commonly tagged events are: “app launched”, “app moved to foreg
 plugins.moments.recordEvent("app launched", null, success, error);
 // Sending a record event with a numerical value associated to it
 plugins.moments.recordEvent("level completed", 10, success, error);
+```
+<a name="module_moments.setFgTrackingMode"></a>
+
+### moments.setFgTrackingMode(trackingMode, successCallback, errorCallback)
+**Kind**: static method of [<code>moments</code>](#module_moments)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trackingMode | <code>string</code> | Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes) |
+| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) |  |
+| errorCallback | [<code>onError</code>](#module_moments.onError) |  |
+
+**Example**  
+```js
+plugins.moments.setFgTrackingMode("Route", success, error);
+```
+<a name="module_moments.setBgTrackingMode"></a>
+
+### moments.setBgTrackingMode(trackingMode, successCallback, errorCallback)
+**Kind**: static method of [<code>moments</code>](#module_moments)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trackingMode | <code>string</code> | Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes) |
+| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) |  |
+| errorCallback | [<code>onError</code>](#module_moments.onError) |  |
+
+**Example**  
+```js
+plugins.moments.setBgTrackingMode("MINIMAL_POWER", success, error);
+```
+<a name="module_moments.bestKnownLocation"></a>
+
+### moments.bestKnownLocation(successCallback, errorCallback)
+**Kind**: static method of [<code>moments</code>](#module_moments)  
+
+| Param | Type |
+| --- | --- |
+| successCallback | [<code>onSuccess</code>](#module_moments.onSuccess) | 
+| errorCallback | [<code>onError</code>](#module_moments.onError) | 
+
+**Example**  
+```js
+plugins.moments.bestKnownLocation(success, error);
 ```
 <a name="module_moments.onError"></a>
 
@@ -95,5 +132,6 @@ Callback function that provides a successful message.
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>string</code> | The message is provided by the device's native code. |
+
 
 ---

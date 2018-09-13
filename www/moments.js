@@ -17,8 +17,6 @@ var moments = {};
 
 
 /**
- * @description Initializes the sdk. Recommended to ask for permissions 
- * (if needed) before doing so.
  * @example
  * plugins.moments.initialize(success, error);
  * @param {module:moments.onSuccess} successCallback
@@ -30,12 +28,6 @@ moments.initialize = function (successCallback, errorCallback) {
 
 
 /**
- * @description An in-app event represents an event or action performed 
- * by the end user within your mobile app. LotaData's SDK enables you to 
- * define, tag, record, and analyze in-app events for your mobile users. 
- * Example of commonly tagged events are: “app launched”, “app moved to foreground”, 
- * “app moved to background”, “start button clicked", "game level complete",
- * "transaction start", "payment complete", "packaged picked up", "delivery complete".
  * @example
  * // Sending a record event with no data binded to it
  * plugins.moments.recordEvent("app launched", null, success, error);
@@ -54,14 +46,35 @@ moments.recordEvent = function (eventName, eventData, successCallback, errorCall
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "recordEvent", [eventName]);
 };
 
+
+/**
+ * @example
+ * plugins.moments.setFgTrackingMode("Route", success, error);
+ * @param {string} trackingMode - Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes)
+ * @param {module:moments.onSuccess} successCallback
+ * @param {module:moments.onError} errorCallback
+ */
 moments.setFgTrackingMode = function (trackingMode, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "MomentsPlugin", "setFgTrackingMode", [trackingMode]);
 };
 
+/**
+ * @example
+ * plugins.moments.setBgTrackingMode("MINIMAL_POWER", success, error);
+ * @param {string} trackingMode - Check [SDK Tracking Modes](https://docs.lotadata.com/android-sdk/overview.html#sdk-tracking-modes)
+ * @param {module:moments.onSuccess} successCallback
+ * @param {module:moments.onError} errorCallback
+ */
 moments.setBgTrackingMode = function (trackingMode, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "MomentsPlugin", "setBgTrackingMode", [trackingMode]);
 };
 
+/**
+ * @example
+ * plugins.moments.bestKnownLocation(success, error);
+ * @param {module:moments.onSuccess} successCallback
+ * @param {module:moments.onError} errorCallback
+ */
 moments.bestKnownLocation = function (successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
 };
