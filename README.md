@@ -5,7 +5,7 @@ Check the [SDK Documentation](https://docs.lotadata.com/) for usage instructions
 ## Installation
 
 ```
-$ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk.git#0.1.0
+$ cordova plugin add https://github.com/LotaData-Inc/cordova-plugin-lotadata-sdk.git#v0.1.0
 ```
 
 ---
