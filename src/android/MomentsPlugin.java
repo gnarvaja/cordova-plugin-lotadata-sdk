@@ -34,10 +34,8 @@ public class MomentsPlugin extends CordovaPlugin {
                 momentsClient = null;
             }
 
-            Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
-            cordova.getThreadPool().execute(new Runnable() {
+            cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
-                    Log.i(TAG, "Permissions OK, not getInstance disabled");
                     momentsClient = MomentsClient.getInstance(cordova.getActivity());
                     if (momentsClient != null) {
                         if (momentsClient.isConnected()) {
@@ -50,6 +48,7 @@ public class MomentsPlugin extends CordovaPlugin {
                     }
                 }
             });
+
             return true;
         } else if (action.equals("recordEvent")) {
             if (momentsClient == null) {
@@ -139,6 +138,7 @@ public class MomentsPlugin extends CordovaPlugin {
         return json;
     }
 
+    @Override
     public void onDestroy() {
         if (momentsClient != null) {
             momentsClient.disconnect();
