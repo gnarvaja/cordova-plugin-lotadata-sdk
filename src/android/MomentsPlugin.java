@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.lotadata.moments.Moments;
 import com.lotadata.moments.plugin.actions.Action;
+import com.lotadata.moments.plugin.actions.BestKnownLocationAction;
 import com.lotadata.moments.plugin.actions.InitializeAction;
 import com.lotadata.moments.plugin.actions.RecordEventAction;
 import com.lotadata.moments.plugin.actions.SetTrackingModeAction;
@@ -48,21 +49,27 @@ public class MomentsPlugin extends CordovaPlugin {
             handleSetBgTrackingMode(data, callbackContext, backgroundThread);
             return true;
         } else if (action.equals("bestKnownLocation")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final Location bestKnownLocation = momentsClient.bestKnownLocation();
-                if (bestKnownLocation == null) {
-                    callbackContext.error("No known location yet");
-                } else {
-                    PluginResult result = new PluginResult(Status.OK, location2JSON(bestKnownLocation));
-                    callbackContext.sendPluginResult(result);
-                }
-            }
+            handleBestKnownLocation(callbackContext, backgroundThread);
             return true;
         } else {
             return false;
         }
+    }
+
+    private void handleBestKnownLocation(final CallbackContext callbackContext, Executor backgroundThread) {
+        Action<Void, JSONObject> bestKnownLocationAction = new BestKnownLocationAction(backgroundThread, momentsClient);
+        bestKnownLocationAction.doAction(null, new Action.Callback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject output) {
+                PluginResult result = new PluginResult(Status.OK, output);
+                callbackContext.sendPluginResult(result);
+            }
+
+            @Override
+            public void onError() {
+                callbackContext.error("Not initialized!");
+            }
+        });
     }
 
     private void handleSetFgTrackingMode(JSONArray data, final CallbackContext callbackContext, Executor backgroundThread) throws JSONException {
@@ -131,24 +138,6 @@ public class MomentsPlugin extends CordovaPlugin {
                 callbackContext.error("Error, permission OK but momentsClient still == null");
             }
         });
-    }
-
-    private JSONObject location2JSON(final Location location) throws JSONException {
-        JSONObject json = new JSONObject();
-        Bundle extras = location.getExtras();
-        if (extras != null) {
-            JSONObject json_extras = new JSONObject();
-            Set<String> keys = extras.keySet();
-            for (String key : keys) {
-                // json.put(key, bundle.get(key)); see edit below
-                json_extras.put(key, JSONObject.wrap(extras.get(key)));
-            }
-            json.put("extras", json_extras);
-        }
-        json.put("latitude", location.getLatitude());
-        json.put("longitude", location.getLongitude());
-        json.put("provider", location.getProvider());
-        return json;
     }
 
     @Override
