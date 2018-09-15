@@ -9,6 +9,7 @@ import com.lotadata.moments.TrackingMode;
 import com.lotadata.moments.plugin.actions.Action;
 import com.lotadata.moments.plugin.actions.InitializeAction;
 import com.lotadata.moments.plugin.actions.RecordEventAction;
+import com.lotadata.moments.plugin.actions.SetTrackingModeAction;
 import com.lotadata.moments.plugin.executors.BackgroundThreadExecutor;
 import com.lotadata.moments.plugin.executors.Executor;
 import com.lotadata.moments.plugin.executors.MainThreadExecutor;
@@ -36,61 +37,13 @@ public class MomentsPlugin extends CordovaPlugin {
         Context context = cordova.getActivity();
 
         if (action.equals("initialize")) {
-
-            Action<Void, Moments> initializeAction = new InitializeAction(mainThread, context, momentsClient);
-            initializeAction.doAction(null, new Action.Callback<Moments>() {
-                @Override
-                public void onSuccess(Moments output) {
-                    momentsClient = output;
-                    callbackContext.success("isConnected");
-                }
-
-                @Override
-                public void onError() {
-                    callbackContext.error("Error, permission OK but momentsClient still == null");
-                }
-            });
-
+            handleInitialize(callbackContext, mainThread, context);
             return true;
         } else if (action.equals("recordEvent")) {
-
-            Event<Double> event = new Event<Double>(data.getString(0));
-            try {
-                event.setData(data.getDouble(1));
-            } catch (JSONException ex) { }
-
-            Action<Event<Double>, Void> recordEventAction = new RecordEventAction(backgroundThread, momentsClient);
-            recordEventAction.doAction(event, new Action.Callback<Void>() {
-                @Override
-                public void onSuccess(Void output) {
-                    callbackContext.success("Event recorded");
-                }
-
-                @Override
-                public void onError() {
-                    callbackContext.error("Not initialized!");
-                }
-            });
-
+            handleRecordEvent(data, callbackContext, backgroundThread);
             return true;
         } else if (action.equals("setFgTrackingMode")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final String trackingMode = data.getString(0);
-                TrackingMode mode = null;
-                try {
-                    mode = TrackingMode.valueOf(trackingMode);
-                } catch (IllegalArgumentException err) {
-                    callbackContext.error("Invalid trackingMode");
-                } catch (NullPointerException err) {
-                    callbackContext.error("trackingMode not specified");
-                }
-                if (mode != null) {
-                    momentsClient.setFgTrackingMode(mode);
-                    callbackContext.success("setFgTrackingMode OK");
-                }
-            }
+            handleSetFgTrackingMode(data, callbackContext, backgroundThread);
             return true;
         } else if (action.equals("setBgTrackingMode")) {
             if (momentsClient == null) {
@@ -127,6 +80,59 @@ public class MomentsPlugin extends CordovaPlugin {
         } else {
             return false;
         }
+    }
+
+    private void handleSetFgTrackingMode(JSONArray data, final CallbackContext callbackContext, Executor backgroundThread) throws JSONException {
+        Action<String, Void> setFgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.FOREGROUND);
+        setFgTrackingModeAction.doAction(data.getString(0), new Action.Callback<Void>() {
+            @Override
+            public void onSuccess(Void output) {
+                callbackContext.success("setFgTrackingMode OK");
+            }
+
+            @Override
+            public void onError() {
+                callbackContext.error("Invalid trackingMode");
+            }
+        });
+    }
+
+    private void handleRecordEvent(JSONArray data, final CallbackContext callbackContext, Executor backgroundThread) throws JSONException {
+
+        Event<Double> event = new Event<Double>(data.getString(0));
+
+        try {
+            event.setData(data.getDouble(1));
+        } catch (JSONException ex) { }
+
+        Action<Event<Double>, Void> recordEventAction = new RecordEventAction(backgroundThread, momentsClient);
+        recordEventAction.doAction(event, new Action.Callback<Void>() {
+            @Override
+            public void onSuccess(Void output) {
+                callbackContext.success("Event recorded");
+            }
+
+            @Override
+            public void onError() {
+                callbackContext.error("Not initialized!");
+            }
+        });
+    }
+
+    private void handleInitialize(final CallbackContext callbackContext, Executor mainThread, Context context) {
+        Action<Void, Moments> initializeAction = new InitializeAction(mainThread, context, momentsClient);
+        initializeAction.doAction(null, new Action.Callback<Moments>() {
+            @Override
+            public void onSuccess(Moments output) {
+                momentsClient = output;
+                callbackContext.success("isConnected");
+            }
+
+            @Override
+            public void onError() {
+                callbackContext.error("Error, permission OK but momentsClient still == null");
+            }
+        });
     }
 
     private JSONObject location2JSON(final Location location) throws JSONException {
