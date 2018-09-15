@@ -1,53 +1,43 @@
 package com.lotadata.moments.plugin;
 
-import org.apache.cordova.*;
+import android.content.Context;
+import android.location.Location;
+import android.os.Bundle;
+
+import com.lotadata.moments.Moments;
+import com.lotadata.moments.TrackingMode;
+import com.lotadata.moments.plugin.actions.Action;
+import com.lotadata.moments.plugin.actions.InitializeAction;
+import com.lotadata.moments.plugin.executors.Executor;
+import com.lotadata.moments.plugin.executors.MainThreadExecutor;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
-
-import java.util.Set;
-import java.lang.NullPointerException;
-import java.lang.IllegalArgumentException;
-
-import android.location.Location;
-import android.Manifest;
-
-import android.util.Log;
-import android.os.Bundle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.lotadata.moments.MomentsClient;
-import com.lotadata.moments.Moments;
-import com.lotadata.moments.TrackingMode;
 
-public class MomentsPlugin extends CordovaPlugin {
-    private static final String TAG = "MomentsPlugin";
+import java.util.Set;
+
+public class MomentsPlugin extends CordovaPlugin implements Action.Callback<Moments> {
 
     private Moments momentsClient = null;
+
+    private CallbackContext callbackContext;
 
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
 
-        if (action.equals("initialize")) {
-            if (momentsClient != null) {
-                momentsClient.disconnect();
-                momentsClient = null;
-            }
+        Executor mainThread = new MainThreadExecutor(cordova.getActivity());
+        Context context = cordova.getActivity();
+        this.callbackContext = callbackContext;
 
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                    if (momentsClient != null) {
-                        if (momentsClient.isConnected()) {
-                            callbackContext.success("isConnected");
-                        } else {
-                            callbackContext.success("is Not Connected");
-                        }
-                    } else {
-                        callbackContext.error("Error, permission OK but momentsClient still == null");
-                    }
-                }
-            });
+        if (action.equals("initialize")) {
+
+            Action<Void, Moments> initializeAction = new InitializeAction(mainThread, context, momentsClient);
+            initializeAction.doAction(null, this);
 
             return true;
         } else if (action.equals("recordEvent")) {
@@ -145,5 +135,16 @@ public class MomentsPlugin extends CordovaPlugin {
             momentsClient = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onSuccess(Moments output) {
+        this.momentsClient = output;
+        callbackContext.success("isConnected");
+    }
+
+    @Override
+    public void onError() {
+        callbackContext.error("Error, permission OK but momentsClient still == null");
     }
 }
