@@ -5,7 +5,6 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.lotadata.moments.Moments;
-import com.lotadata.moments.TrackingMode;
 import com.lotadata.moments.plugin.actions.Action;
 import com.lotadata.moments.plugin.actions.InitializeAction;
 import com.lotadata.moments.plugin.actions.RecordEventAction;
@@ -46,23 +45,7 @@ public class MomentsPlugin extends CordovaPlugin {
             handleSetFgTrackingMode(data, callbackContext, backgroundThread);
             return true;
         } else if (action.equals("setBgTrackingMode")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final String trackingMode = data.getString(0);
-                TrackingMode mode = null;
-                try {
-                    mode = TrackingMode.valueOf(trackingMode);
-                } catch (IllegalArgumentException err) {
-                    callbackContext.error("Invalid trackingMode");
-                } catch (NullPointerException err) {
-                    callbackContext.error("trackingMode not specified");
-                }
-                if (mode != null) {
-                    momentsClient.setBgTrackingMode(mode);
-                    callbackContext.success("setBgTrackingMode OK");
-                }
-            }
+            handleSetBgTrackingMode(data, callbackContext, backgroundThread);
             return true;
         } else if (action.equals("bestKnownLocation")) {
             if (momentsClient == null) {
@@ -88,6 +71,21 @@ public class MomentsPlugin extends CordovaPlugin {
             @Override
             public void onSuccess(Void output) {
                 callbackContext.success("setFgTrackingMode OK");
+            }
+
+            @Override
+            public void onError() {
+                callbackContext.error("Invalid trackingMode");
+            }
+        });
+    }
+
+    private void handleSetBgTrackingMode(JSONArray data, final CallbackContext callbackContext, Executor backgroundThread) throws JSONException {
+        Action<String, Void> setFgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.BACKGROUND);
+        setFgTrackingModeAction.doAction(data.getString(0), new Action.Callback<Void>() {
+            @Override
+            public void onSuccess(Void output) {
+                callbackContext.success("setBgTrackingMode OK");
             }
 
             @Override
