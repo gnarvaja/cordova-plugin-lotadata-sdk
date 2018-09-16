@@ -1,33 +1,34 @@
 package com.lotadata.moments.plugin.actions;
 
 import com.lotadata.moments.Moments;
+import com.lotadata.moments.plugin.actions.callback.Callback;
 import com.lotadata.moments.plugin.executors.Executor;
 import com.lotadata.moments.plugin.models.Event;
 
-public class RecordEventAction implements Action<Event<Double>, Void> {
+public class RecordEventAction implements Action {
 
     private Executor executor;
 
     private Moments momentsClient;
-    private Callback<Void> callback;
+    private Callback callback;
     private Event<Double> event;
 
-    public RecordEventAction(Executor executor, Moments momentsClient) {
+    public RecordEventAction(Executor executor, Moments momentsClient, Event<Double> event, Callback callback) {
         this.executor = executor;
         this.momentsClient = momentsClient;
+        this.event = event;
+        this.callback = callback;
     }
 
     @Override
-    public void doAction(Event<Double> input, Callback<Void> callback) {
-        this.event = input;
-        this.callback = callback;
+    public void doAction() {
         executor.execute(this);
     }
 
     @Override
     public void run() {
         if (momentsClient == null) {
-            callback.onError();
+            callback.onError("Not initialized!");
         } else {
             final String eventName = event.getEventName();
 
@@ -38,7 +39,7 @@ public class RecordEventAction implements Action<Event<Double>, Void> {
                 momentsClient.recordEvent(eventName);
             }
 
-            callback.onSuccess(null);
+            callback.onSuccess("Event recorded");
         }
     }
 }

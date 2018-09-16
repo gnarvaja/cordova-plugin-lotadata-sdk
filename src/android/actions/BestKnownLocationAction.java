@@ -4,43 +4,46 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.lotadata.moments.Moments;
+import com.lotadata.moments.plugin.actions.callback.Callback;
 import com.lotadata.moments.plugin.executors.Executor;
 
+import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Set;
 
-public class BestKnownLocationAction implements Action<Void, JSONObject> {
+public class BestKnownLocationAction implements Action {
 
     private Executor executor;
     private Moments momentsClient;
-    private Callback<JSONObject> callback;
+    private Callback callback;
 
-    public BestKnownLocationAction(Executor executor, Moments momentsClient) {
+    public BestKnownLocationAction(Executor executor, Moments momentsClient, Callback callback) {
         this.executor = executor;
         this.momentsClient = momentsClient;
+        this.callback = callback;
     }
 
     @Override
-    public void doAction(Void input, Callback<JSONObject> callback) {
-        this.callback = callback;
+    public void doAction() {
         executor.execute(this);
     }
 
     @Override
     public void run() {
         if (momentsClient == null) {
-            callback.onError();
+            callback.onError("Not initialized!");
         } else {
             final Location bestKnownLocation = momentsClient.bestKnownLocation();
             if (bestKnownLocation == null) {
-                callback.onError();
+                callback.onError("Not initialized!");
             } else {
                 try {
-                    callback.onSuccess(location2JSON(bestKnownLocation));
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, location2JSON(bestKnownLocation));
+                    callback.sendPluginResult(result);
                 } catch (JSONException e) {
-                    callback.onError();
+                    callback.onError("Not initialized!");
                 }
             }
         }

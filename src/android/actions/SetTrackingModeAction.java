@@ -2,9 +2,10 @@ package com.lotadata.moments.plugin.actions;
 
 import com.lotadata.moments.Moments;
 import com.lotadata.moments.TrackingMode;
+import com.lotadata.moments.plugin.actions.callback.Callback;
 import com.lotadata.moments.plugin.executors.Executor;
 
-public class SetTrackingModeAction implements Action<String, Void> {
+public class SetTrackingModeAction implements Action {
 
     public enum STATE {
         FOREGROUND,
@@ -15,26 +16,26 @@ public class SetTrackingModeAction implements Action<String, Void> {
     private Moments momentsClient;
     private STATE state;
 
-    private Callback<Void> callback;
+    private Callback callback;
     private String trackingMode;
 
-    public SetTrackingModeAction(Executor executor, Moments momentsClient, STATE state) {
+    public SetTrackingModeAction(Executor executor, Moments momentsClient, STATE state, String trackingMode, Callback callback) {
         this.executor = executor;
         this.momentsClient = momentsClient;
         this.state = state;
+        this.callback = callback;
+        this.trackingMode = trackingMode;
     }
 
     @Override
-    public void doAction(String trackingMode, Callback<Void> callback) {
-        this.callback = callback;
-        this.trackingMode = trackingMode;
+    public void doAction() {
         executor.execute(this);
     }
 
     @Override
     public void run() {
         if (momentsClient == null) {
-            callback.onError();
+            callback.onError("Not initialized");
         } else {
             try {
                 TrackingMode mode = TrackingMode.valueOf(trackingMode);
@@ -45,9 +46,9 @@ public class SetTrackingModeAction implements Action<String, Void> {
                     case BACKGROUND:
                         momentsClient.setBgTrackingMode(mode);
                 }
-                callback.onSuccess(null);
+                callback.onSuccess("setTrackingMode OK - " + state.name());
             } catch (IllegalArgumentException err) {
-                callback.onError();
+                callback.onError("Invalid trackingMode");
             }
         }
     }
