@@ -35,7 +35,6 @@ public class MomentsPlugin extends CordovaPlugin {
         if (action.equals("initialize")) {
             Action initializeAction = new InitializeAction(mainThread, context, momentsClient, callback);
             initializeAction.doAction();
-            return true;
         } else if (action.equals("recordEvent")) {
             Event<Double> event = new Event<Double>(data.getString(0));
             try {
@@ -43,24 +42,22 @@ public class MomentsPlugin extends CordovaPlugin {
             } catch (JSONException ex) { }
             Action recordEventAction = new RecordEventAction(backgroundThread, momentsClient, event, callback);
             recordEventAction.doAction();
-            return true;
         } else if (action.equals("setFgTrackingMode")) {
             String trackingMode = data.getString(0);
             Action setFgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.FOREGROUND, trackingMode, callback);
             setFgTrackingModeAction.doAction();
-            return true;
         } else if (action.equals("setBgTrackingMode")) {
             String trackingMode = data.getString(0);
             Action setBgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.BACKGROUND, trackingMode, callback);
             setBgTrackingModeAction.doAction();
-            return true;
         } else if (action.equals("bestKnownLocation")) {
             Action bestKnownLocationAction = new BestKnownLocationAction(backgroundThread, momentsClient, callback);
             bestKnownLocationAction.doAction();
-            return true;
         } else {
             return false;
         }
+
+        return true;
     }
 
     @Override
