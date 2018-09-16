@@ -18,14 +18,16 @@ import com.lotadata.moments.plugin.models.Event;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
-import org.json.JSONException;
+
+import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsDouble;
+import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsString;
 
 public class MomentsPlugin extends CordovaPlugin {
 
     private Moments momentsClient = null;
 
     @Override
-    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) {
 
         Executor mainThread = new MainThreadExecutor(cordova.getActivity());
         Executor backgroundThread = new BackgroundThreadExecutor(cordova.getThreadPool());
@@ -36,18 +38,17 @@ public class MomentsPlugin extends CordovaPlugin {
             Action initializeAction = new InitializeAction(mainThread, context, momentsClient, callback);
             initializeAction.doAction();
         } else if (action.equals("recordEvent")) {
-            Event<Double> event = new Event<Double>(data.getString(0));
-            try {
-                event.setData(data.getDouble(1));
-            } catch (JSONException ex) { }
+            Event<Double> event = new Event<Double>(getJsParameterAsString(data, 0));
+            event.setData(getJsParameterAsDouble(data, 1));
+
             Action recordEventAction = new RecordEventAction(backgroundThread, momentsClient, event, callback);
             recordEventAction.doAction();
         } else if (action.equals("setFgTrackingMode")) {
-            String trackingMode = data.getString(0);
+            String trackingMode = getJsParameterAsString(data, 0);
             Action setFgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.FOREGROUND, trackingMode, callback);
             setFgTrackingModeAction.doAction();
         } else if (action.equals("setBgTrackingMode")) {
-            String trackingMode = data.getString(0);
+            String trackingMode = getJsParameterAsString(data, 0);
             Action setBgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.BACKGROUND, trackingMode, callback);
             setBgTrackingModeAction.doAction();
         } else if (action.equals("bestKnownLocation")) {
