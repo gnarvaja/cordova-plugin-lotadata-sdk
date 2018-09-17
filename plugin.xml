@@ -6,6 +6,10 @@
   <name>Moments SDK</name>
 
   <preference name="GOOGLE_API_KEY"/>
+  <preference name="ENABLE_CONTEXT_AWARE" default="false"/>
+  <preference name="KEEP_SERVICE" default="false"/>
+  <preference name="FOREGROUND_ONLY" default="true"/>
+  <preference name="SHOW_PRIVACY_POLICY" default="true"/>
   <engines>
     <engine name="cordova" version=">=3.4.0"/>
   </engines>
@@ -27,6 +31,10 @@
       <meta-data android:name="com.google.android.awareness.API_KEY" android:value="$GOOGLE_API_KEY"/>
       <meta-data android:name="com.google.android.geo.API_KEY" android:value="$GOOGLE_API_KEY"/>
       <meta-data android:name="com.google.android.nearby.messages.API_KEY" android:value="$GOOGLE_API_KEY"/>
+      <meta-data android:name="com.lotadata.moments.ENABLE_CONTEXT_AWARE" android:value="$ENABLE_CONTEXT_AWARE"/>
+      <meta-data android:name="com.lotadata.moments.KEEP_SERVICE" android:value="$KEEP_SERVICE"/>
+      <meta-data android:name="com.lotadata.moments.FOREGROUND_ONLY" android:value="$FOREGROUND_ONLY"/>
+      <meta-data android:name="com.lotadata.moments.SHOW_PRIVACY_POLICY" android:value="$SHOW_PRIVACY_POLICY"/>
     </config-file>
 
     <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
