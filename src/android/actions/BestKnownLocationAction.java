@@ -35,16 +35,14 @@ public class BestKnownLocationAction implements Action {
         if (momentsClient == null) {
             callback.onError("Not initialized!");
         } else {
-            final Location bestKnownLocation = momentsClient.bestKnownLocation();
-            if (bestKnownLocation == null) {
+            try {
+                Location bestKnownLocation = momentsClient.bestKnownLocation();
+                PluginResult result = new PluginResult(PluginResult.Status.OK, location2JSON(bestKnownLocation));
+                callback.sendPluginResult(result);
+            } catch (JSONException ex) {
                 callback.onError("Not initialized!");
-            } else {
-                try {
-                    PluginResult result = new PluginResult(PluginResult.Status.OK, location2JSON(bestKnownLocation));
-                    callback.sendPluginResult(result);
-                } catch (JSONException e) {
-                    callback.onError("Not initialized!");
-                }
+            } catch (Exception ex) {
+                callback.onError("No known location yet");
             }
         }
     }
