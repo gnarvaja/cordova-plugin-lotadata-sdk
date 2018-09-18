@@ -28,7 +28,7 @@ public class RecordEventAction implements Action {
     @Override
     public void run() {
         if (momentsClient == null) {
-            callback.onError("Not initialized!");
+            callback.onError("MomentsClient not initialized");
         } else {
             final String eventName = event.getEventName();
 

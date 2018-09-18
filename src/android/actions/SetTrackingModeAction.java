@@ -5,6 +5,8 @@ import com.lotadata.moments.TrackingMode;
 import com.lotadata.moments.plugin.actions.callback.Callback;
 import com.lotadata.moments.plugin.executors.Executor;
 
+import java.util.Locale;
+
 public class SetTrackingModeAction implements Action {
 
     public enum STATE {
@@ -35,7 +37,7 @@ public class SetTrackingModeAction implements Action {
     @Override
     public void run() {
         if (momentsClient == null) {
-            callback.onError("Not initialized");
+            callback.onError("MomentsClient not initialized");
         } else {
             try {
                 TrackingMode mode = TrackingMode.valueOf(trackingMode);
@@ -46,7 +48,7 @@ public class SetTrackingModeAction implements Action {
                     case BACKGROUND:
                         momentsClient.setBgTrackingMode(mode);
                 }
-                callback.onSuccess("setTrackingMode OK - " + state.name());
+                callback.onSuccess(String.format("%s tracking mode set for %s state", trackingMode, state.name()));
             } catch (IllegalArgumentException err) {
                 callback.onError("Invalid trackingMode");
             }

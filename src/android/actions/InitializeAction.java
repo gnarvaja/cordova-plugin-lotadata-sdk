@@ -34,15 +34,15 @@ public class InitializeAction implements Action {
 
         momentsClient = MomentsClient.getInstance(context);
         if (momentsClient != null) {
-            if (momentsClient.isConnected()) {
-                callback.onSuccess("isConnected");
-            } else {
-                callback.onSuccess("is Not Connected");
-            }
-
             pluginView.setMomentsClient(momentsClient);
+
+            if (momentsClient.isConnected()) {
+                callback.onSuccess("MomentsClient connected");
+            } else {
+                callback.onSuccess("MomentsClient not connected");
+            }
         } else {
-            callback.onError("Error, permission OK but momentsClient still == null");
+            callback.onError("MomentsClient not able to start");
         }
     }
 
