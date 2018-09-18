@@ -1,6 +1,7 @@
 package com.lotadata.moments.plugin.actions.callback;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 public class CallbackContextWrapper implements Callback {
 
@@ -18,5 +19,10 @@ public class CallbackContextWrapper implements Callback {
     @Override
     public void onError(String error) {
         callbackContext.error(error);
+    }
+
+    @Override
+    public void sendPluginResult(PluginResult result) {
+        callbackContext.sendPluginResult(result);
     }
 }

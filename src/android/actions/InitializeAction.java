@@ -13,13 +13,15 @@ public class InitializeAction implements Action {
 
     private Executor executor;
     private Callback callback;
+    private Action.PluginView pluginView;
 
     private Moments momentsClient;
 
-    public InitializeAction(Executor executor, Context context, Moments momentsClient, Callback callback) {
+    public InitializeAction(Executor executor, Context context, Moments momentsClient, PluginView pluginView, Callback callback) {
         this.executor = executor;
         this.context = context;
         this.momentsClient = momentsClient;
+        this.pluginView = pluginView;
         this.callback = callback;
     }
 
@@ -35,8 +37,10 @@ public class InitializeAction implements Action {
             if (momentsClient.isConnected()) {
                 callback.onSuccess("isConnected");
             } else {
-                callback.onSuccess("isConnected");
+                callback.onSuccess("is Not Connected");
             }
+
+            pluginView.setMomentsClient(momentsClient);
         } else {
             callback.onError("Error, permission OK but momentsClient still == null");
         }

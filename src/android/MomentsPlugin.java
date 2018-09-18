@@ -22,7 +22,7 @@ import org.json.JSONArray;
 import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsDouble;
 import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsString;
 
-public class MomentsPlugin extends CordovaPlugin {
+public class MomentsPlugin extends CordovaPlugin implements Action.PluginView {
 
     private Moments momentsClient = null;
 
@@ -35,7 +35,7 @@ public class MomentsPlugin extends CordovaPlugin {
         Context context = cordova.getActivity();
 
         if (action.equals("initialize")) {
-            Action initializeAction = new InitializeAction(mainThread, context, momentsClient, callback);
+            Action initializeAction = new InitializeAction(mainThread, context, momentsClient, this, callback);
             initializeAction.doAction();
         } else if (action.equals("recordEvent")) {
             Event<Double> event = new Event<Double>(getJsParameterAsString(data, 0));
@@ -68,5 +68,10 @@ public class MomentsPlugin extends CordovaPlugin {
             momentsClient = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void setMomentsClient(Moments momentsClient) {
+        this.momentsClient = momentsClient;
     }
 }
