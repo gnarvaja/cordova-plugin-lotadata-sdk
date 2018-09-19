@@ -24,6 +24,18 @@
     </config-file>
 
     <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
+    <source-file src="src/android/actions/callback/Callback.java" target-dir="src/com/lotadata/moments/plugin/actions/callback"/>
+    <source-file src="src/android/actions/callback/CallbackContextWrapper.java" target-dir="src/com/lotadata/moments/plugin/actions/callback"/>
+    <source-file src="src/android/actions/Action.java" target-dir="src/com/lotadata/moments/plugin/actions/"/>
+    <source-file src="src/android/actions/BestKnownLocationAction.java" target-dir="src/com/lotadata/moments/plugin/actions/"/>
+    <source-file src="src/android/actions/InitializeAction.java" target-dir="src/com/lotadata/moments/plugin/actions/"/>
+    <source-file src="src/android/actions/RecordEventAction.java" target-dir="src/com/lotadata/moments/plugin/actions/"/>
+    <source-file src="src/android/actions/SetTrackingModeAction.java" target-dir="src/com/lotadata/moments/plugin/actions/"/>
+    <source-file src="src/android/executors/Executor.java" target-dir="src/com/lotadata/moments/plugin/executors/"/>
+    <source-file src="src/android/executors/MainThreadExecutor.java" target-dir="src/com/lotadata/moments/plugin/executors/"/>
+    <source-file src="src/android/executors/BackgroundThreadExecutor.java" target-dir="src/com/lotadata/moments/plugin/executors/"/>
+    <source-file src="src/android/models/Event.java" target-dir="src/com/lotadata/moments/plugin/models/"/>
+    <source-file src="src/android/utils/JsonParser.java" target-dir="src/com/lotadata/moments/plugin/utils/"/>
     <source-file src="lotadata-sdk-latest.aar" target-dir="libs"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
