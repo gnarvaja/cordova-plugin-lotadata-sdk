@@ -36,7 +36,7 @@
     <source-file src="src/android/executors/BackgroundThreadExecutor.java" target-dir="src/com/lotadata/moments/plugin/executors/"/>
     <source-file src="src/android/models/Event.java" target-dir="src/com/lotadata/moments/plugin/models/"/>
     <source-file src="src/android/utils/JsonParser.java" target-dir="src/com/lotadata/moments/plugin/utils/"/>
-    <source-file src="lotadata-sdk-latest.aar" target-dir="libs"/>
+    <lib-file src="lotadata-sdk-latest.aar" arch="device"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
 </plugin>
