@@ -1,6 +1,6 @@
 # Cordova Plugin for LotaData SDK
 
-Check the [SDK Documentation](https://docs.lotadata.com/) for usage instructions.
+Check the [SDK Documentation](https://docs.lotadata.com/) for more instructions and our [demo repository](https://github.com/LotaData-Inc/cordova-sample-app) for an example of installing and using the plugin along with a Cordova app.
 
 ## Installation
 
