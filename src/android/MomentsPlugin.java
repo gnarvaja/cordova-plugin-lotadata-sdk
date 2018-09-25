@@ -1,141 +1,64 @@
 package com.lotadata.moments.plugin;
 
-import org.apache.cordova.*;
-import org.apache.cordova.PluginResult;
-import org.apache.cordova.PluginResult.Status;
+import android.content.Context;
 
-import java.util.Set;
-import java.lang.NullPointerException;
-import java.lang.IllegalArgumentException;
-
-import android.location.Location;
-import android.Manifest;
-
-import android.util.Log;
-import android.os.Bundle;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.lotadata.moments.MomentsClient;
 import com.lotadata.moments.Moments;
-import com.lotadata.moments.TrackingMode;
+import com.lotadata.moments.plugin.actions.Action;
+import com.lotadata.moments.plugin.actions.BestKnownLocationAction;
+import com.lotadata.moments.plugin.actions.InitializeAction;
+import com.lotadata.moments.plugin.actions.RecordEventAction;
+import com.lotadata.moments.plugin.actions.SetTrackingModeAction;
+import com.lotadata.moments.plugin.actions.callback.Callback;
+import com.lotadata.moments.plugin.actions.callback.CallbackContextWrapper;
+import com.lotadata.moments.plugin.executors.BackgroundThreadExecutor;
+import com.lotadata.moments.plugin.executors.Executor;
+import com.lotadata.moments.plugin.executors.MainThreadExecutor;
+import com.lotadata.moments.plugin.models.Event;
 
-public class MomentsPlugin extends CordovaPlugin {
-    private static final String TAG = "MomentsPlugin";
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.json.JSONArray;
+
+import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsDouble;
+import static com.lotadata.moments.plugin.utils.JsonParser.getJsParameterAsString;
+
+public class MomentsPlugin extends CordovaPlugin implements Action.PluginView {
 
     private Moments momentsClient = null;
 
     @Override
-    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) {
+
+        Executor mainThread = new MainThreadExecutor(cordova.getActivity());
+        Executor backgroundThread = new BackgroundThreadExecutor(cordova.getThreadPool());
+        Callback callback = new CallbackContextWrapper(callbackContext);
+        Context context = cordova.getActivity();
 
         if (action.equals("initialize")) {
-            if (momentsClient != null) {
-                momentsClient.disconnect();
-                momentsClient = null;
-            }
-
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                    if (momentsClient != null) {
-                        if (momentsClient.isConnected()) {
-                            callbackContext.success("isConnected");
-                        } else {
-                            callbackContext.success("is Not Connected");
-                        }
-                    } else {
-                        callbackContext.error("Error, permission OK but momentsClient still == null");
-                    }
-                }
-            });
-
-            return true;
+            Action initializeAction = new InitializeAction(mainThread, context, momentsClient, this, callback);
+            initializeAction.doAction();
         } else if (action.equals("recordEvent")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final String eventName = data.getString(0);
-                if (data.length() > 1) {
-                    final Double eventData = data.getDouble(1);
-                    momentsClient.recordEvent(eventName, eventData);
-                } else {
-                    momentsClient.recordEvent(eventName);
-                }
-                callbackContext.success("Event recorded");
-            }
-            return true;
+            Event<Double> event = new Event<Double>(getJsParameterAsString(data, 0));
+            event.setData(getJsParameterAsDouble(data, 1));
+
+            Action recordEventAction = new RecordEventAction(backgroundThread, momentsClient, event, callback);
+            recordEventAction.doAction();
         } else if (action.equals("setFgTrackingMode")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final String trackingMode = data.getString(0);
-                TrackingMode mode = null;
-                try {
-                    mode = TrackingMode.valueOf(trackingMode);
-                } catch (IllegalArgumentException err) {
-                    callbackContext.error("Invalid trackingMode");
-                } catch (NullPointerException err) {
-                    callbackContext.error("trackingMode not specified");
-                }
-                if (mode != null) {
-                    momentsClient.setFgTrackingMode(mode);
-                    callbackContext.success("setFgTrackingMode OK");
-                }
-            }
-            return true;
+            String trackingMode = getJsParameterAsString(data, 0);
+            Action setFgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.FOREGROUND, trackingMode, callback);
+            setFgTrackingModeAction.doAction();
         } else if (action.equals("setBgTrackingMode")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final String trackingMode = data.getString(0);
-                TrackingMode mode = null;
-                try {
-                    mode = TrackingMode.valueOf(trackingMode);
-                } catch (IllegalArgumentException err) {
-                    callbackContext.error("Invalid trackingMode");
-                } catch (NullPointerException err) {
-                    callbackContext.error("trackingMode not specified");
-                }
-                if (mode != null) {
-                    momentsClient.setBgTrackingMode(mode);
-                    callbackContext.success("setBgTrackingMode OK");
-                }
-            }
-            return true;
+            String trackingMode = getJsParameterAsString(data, 0);
+            Action setBgTrackingModeAction = new SetTrackingModeAction(backgroundThread, momentsClient, SetTrackingModeAction.STATE.BACKGROUND, trackingMode, callback);
+            setBgTrackingModeAction.doAction();
         } else if (action.equals("bestKnownLocation")) {
-            if (momentsClient == null) {
-                callbackContext.error("Not initialized!");
-            } else {
-                final Location bestKnownLocation = momentsClient.bestKnownLocation();
-                if (bestKnownLocation == null) {
-                    callbackContext.error("No known location yet");
-                } else {
-                    PluginResult result = new PluginResult(Status.OK, location2JSON(bestKnownLocation));
-                    callbackContext.sendPluginResult(result);
-                }
-            }
-            return true;
+            Action bestKnownLocationAction = new BestKnownLocationAction(backgroundThread, momentsClient, callback);
+            bestKnownLocationAction.doAction();
         } else {
             return false;
         }
-    }
 
-    private JSONObject location2JSON(final Location location) throws JSONException {
-        JSONObject json = new JSONObject();
-        Bundle extras = location.getExtras();
-        if (extras != null) {
-            JSONObject json_extras = new JSONObject();
-            Set<String> keys = extras.keySet();
-            for (String key : keys) {
-                // json.put(key, bundle.get(key)); see edit below
-                json_extras.put(key, JSONObject.wrap(extras.get(key)));
-            }
-            json.put("extras", json_extras);
-        }
-        json.put("latitude", location.getLatitude());
-        json.put("longitude", location.getLongitude());
-        json.put("provider", location.getProvider());
-        return json;
+        return true;
     }
 
     @Override
@@ -145,5 +68,10 @@ public class MomentsPlugin extends CordovaPlugin {
             momentsClient = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void setMomentsClient(Moments momentsClient) {
+        this.momentsClient = momentsClient;
     }
 }
