@@ -7,8 +7,8 @@ repositories {
 dependencies {
     compile(name: 'lotadata-sdk-latest', ext: 'aar')
 
-    compile 'com.google.android.gms:play-services-ads:15.0.1'
-    compile 'com.google.android.gms:play-services-location:15.0.1'
-    compile 'com.google.android.gms:play-services-awareness:15.0.1'
+    compile 'com.google.android.gms:play-services-ads:16.+'
+    compile 'com.google.android.gms:play-services-location:16.+'
+    compile 'com.google.android.gms:play-services-awareness:16.+'
     compile 'com.google.maps.android:android-maps-utils:0.5+'
 }
